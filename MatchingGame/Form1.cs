@@ -58,6 +58,38 @@ namespace MatchingGame
                 }
             }
         }
+
+        /// <summary>
+        /// Check every icon to see if it is matched, by 
+        /// comparing its forground color to its background color
+        /// if all of the icons are matched, the player wins
+        /// </summary>
+       private void CheckForWinner()
+        {
+
+            //Go through all of the lables in the Table LayoutPanel,
+            //checking each one to see it its icon is matched
+
+        foreach (Control control in tableLayoutPanel1.Controls)
+            {
+                Label iconLabel = control as Label;    
+
+                if (iconLabel !=null)
+                {
+                    if (iconLabel.ForeColor == iconLabel.BackColor)
+                        return;
+                }
+            }
+
+            //If the loop did not return, it did not find
+            //any unmatched icons
+            //that means the user won. show a message and close the form
+
+            MessageBox.Show("you matched all the icons!", "Congratulations");
+            Close();
+        }
+          
+
         /// <summary>
         /// Every label's Click event is handled by this event handler
         /// </summary>
@@ -99,7 +131,16 @@ namespace MatchingGame
                secondClicked = clickedLabel;
                 secondClicked.ForeColor = Color.Black;
 
-
+                CheckForWinner();
+                //if the player clicked two matching icons, keep them
+                //black and rest firstclicked and secondClicked
+                //so the player can click another icon
+                if (firstClicked.Text == secondClicked.Text)
+                {
+                    firstClicked = null;
+                    secondClicked = null;
+                    return;
+                }
                 //if the player gets this far, the player
                 //clicked two different icons, so start the
                 //timer (which will wait three quarters of 
